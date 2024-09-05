@@ -1,0 +1,198 @@
+<!DOCTYPE html>bh Lo
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Cube Search</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background: url('https://images.unsplash.com/photo-1516912207495-d5dfc39bc0b6') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+            color: #fff;
+        }
+
+        h1 span {
+            font-size: 0.5em;
+            color: #ccc;
+            position: absolute;
+            bottom: 0;
+            right: -70px;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #fff;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        button {
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .results p {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            word-break: break-word;
+        }
+
+        .results a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .results a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fast Search<span>by Xynn'z</span></h1>
+        <form id="searchForm">
+            <label for="brand">Select Brand:</label>
+            <select id="brand" name="brand">
+                <option value="Acmé De La Vie">Acmé De La Vie</option>
+                <option value="DOBUJACK">DOBUJACK</option>
+                <option value="LOYALTY">LOYALTY</option>
+                <option value="H&M">H&M</option>
+            </select>
+
+            <label for="type">Select Type:</label>
+            <select id="type" name="type">
+                <option value="T-shirt">T-shirt</option>
+                <option value="Hoodie">Hoodie</option>
+                <option value="Sweatshirt ">Sweatshirt</option>
+            </select>
+
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        const products = {
+            "Acmé De La Vie": [
+                { type: "T-shirt", name: "Acme De La Vie RABBIT BEAR DOLL LOGO SHOTRS SLEVE T-SHIRT BLACK", link: "https://www.zalora.co.id/p/acme-de-la-vie-rabbit-bear-doll-logo-short-sleeve-t-shirt-black-4517717" },
+                { type: "T-shirt", name: "Acme De La Vie NEW SYMBOL BIO WASHING SHORT SLEEVE T-SHIRT BLACK", link: "https://www.zalora.co.id/p/acme-de-la-vie-new-symbol-bio-washing-short-sleeve-t-shirt-black-4521334" },
+                { type: "T-shirt", name: "Acme De La Vie BABY FACE CAT EARPLUG SHORT SLEEVE T-SHIRT BLACK", link: "https://www.zalora.co.id/p/acme-de-la-vie-baby-face-cat-earplug-short-sleeve-t-shirt-black-4516385" },
+                { type: "T-shirt", name: "Acme De La Vie BABY FACE STUDY BOY SHORT SLEEVE T-SHIRT R BLACK", link: "https://www.zalora.co.id/p/acme-de-la-vie-baby-face-study-boy-short-sleeve-t-shirt-r-black-4516411" },
+                { type: "T-shirt", name: "Acme de la vie Baby Face Short Sleeve T-Shirt White Colorful Hands", link: "https://www.zalora.co.id/p/acme-de-la-vie-adlv-acmedelavie-baby-face-short-sleeve-t-shirt-white-colorful-hands-4323080" },
+                { type: "T-shirt", name: "Acme De La Vie THE POWERPUFF GIRL X ACMEDELAVIE BIG PRINTING ARTWORK T-SHIRT CHARCOAL", link: "https://www.zalora.co.id/p/acme-de-la-vie-the-powerpuff-girls-x-acmedelavie-big-printing-artwork-t-shirts-charcoal-4524963" },
+                { type: "Hoodie", name: "Acme De La Vie BABY FACE HOODIE BLACK ASTRONAUT", link: "https://www.zalora.co.id/p/acme-de-la-vie-baby-face-hoodie-black-astronaut-black-4276317" },
+                { type: "Hoodie", name: "Acme De La Vie BABY FACE HOODIE BLACK RABBIT", link: "https://www.zalora.co.id/p/acme-de-la-vie-baby-face-hoodie-black-rabbit-black-4304693" },
+                { type: "Hoodie", name: "Acme De La Vie BABY FACE HOODIE BLACK SKYDIVING", link: "https://www.zalora.co.id/p/acme-de-la-vie-baby-face-hoodie-black-skydiving-black-4276320" },
+                { type: "Hoodie", name: "Acme De La Vie BABY FACE HOODIE BLACK SNOW", link: "https://www.zalora.co.id/p/acme-de-la-vie-baby-face-hoodie-black-snow-black-4304692" },
+            ],
+            "DOBUJACK": [
+                { type: "T-shirt", name: "Dobujack Tshirt Night Watch Black Tees", link: "https://id.shp.ee/doDF4fH" },
+                { type: "Hoodie", name: "Dobujack Evacuation Black Hoodie", link: "https://id.shp.ee/ApDmMxM" },
+                { type: "Hoodie", name: "Hoodie Hitam Dobujack Heartbreak", link: "https://id.shp.ee/TLotRWk" },
+                { type: "Hoodie", name: "Dobujack Bonnie Logo Misty Hoodie", link: "https://id.shp.ee/2yeiGrR" },
+                { type: "Hoodie", name: "Dobujack Little Logo White Sage Green Hoodie", link: "https://id.shp.ee/kpQ2Z2S" },
+                { type: "Hoodie", name: "Dobujack Little Logo Beige Hoodie", link: "https://id.shp.ee/tmyjgub" },
+                { type: "Hoodie", name: "Dobujack Hoodie Logo Font Black Hoodie", link: "https://id.shp.ee/29G8R6J" },
+                { type: "Hoodie", name: "Dobujack Little Logo Black On Black Hoodie", link: "https://id.shp.ee/uxAZKcV" },
+                { type: "Hoodie", name: "Dobujack Little Logo Misty Hoodie", link: "https://id.shp.ee/LvYvo31" },
+                { type: "Hoodie", name: "Dobujack Little Logo White Black Hoodie", link: "https://id.shp.ee/fDQx3Mn" },
+            ],
+            "LOYALTY": [
+                { type: "T-shirt", name: "LOGO LOYALTY BLACK TEE", link: "https://id.shp.ee/whUf1dX" },
+                { type: "T-shirt", name: "Loyalty - Magic Tee", link: "https://id.shp.ee/hLjvraA" },
+                { type: "T-shirt", name: "4 STARS TEE LOYALTY", link: "https://id.shp.ee/fdeVQQF" },
+                { type: "T-shirt", name: "HORSE BLACK LOYALTY TEE", link: "https://id.shp.ee/WZUf7Y4" },
+                { type: "T-shirt", name: "TWO FACE LOYALTY BLACK TEE", link: "https://id.shp.ee/nNEepDL" },
+                { type: "Hoodie", name: "HOODIE ANGRY CAT BLACK", link: "https://id.shp.ee/1w8L1wE" },
+                { type: "Hoodie", name: "BUTTERFLY HOODIE", link: "https://id.shp.ee/z3gesab" },
+                { type: "Hoodie", name: "FIRST LOVE IS MY MOM HOODIE", link: "https://id.shp.ee/m4Atm3Z" },
+                { type: "Hoodie", name: "I LOVE MY SELF TWO BLACK", link: "https://id.shp.ee/6f1rXgf" },
+                { type: "Hoodie", name: "STARS BROWN HOODIE LOYALTY", link: "https://id.shp.ee/JVZHVVR" },
+            ],
+            "H&M": [
+                { type: "T-shirt", name: "H&M Pria Slim Fit T-shirt", link: "https://id.shp.ee/DLwGnZD" },
+                { type: "T-shirt", name: "H&M Pria Loose Fit Printed T-shirt", link: "https://id.shp.ee/h6baZLX" },
+                { type: "T-shirt", name: "H&M Pria Relaxed Fit Printed T- shirt 1136298", link: "https://id.shp.ee/3CNp6rJ" },
+                { type: "T-shirt", name: "H&M Pria Regular Fit T-shirt", link: "https://id.shp.ee/NrkVYub" },
+                { type: "T-shirt", name: "H&M Pria Regular Fit T-shirt 0685816_01", link: "https://id.shp.ee/Q9WXFUv" },
+                { type: "Sweatshirt", name: "H&M Pria Loose Fit Sweatshirt", link: "https://id.shp.ee/c7yEEYu" },
+                { type: "Sweatshirt", name: "H&M Pria Relaxed Fit Sweatshirt", link: "https://id.shp.ee/jL41VsS" },
+                { type: "Hoodie", name: "H&M Pria Loose Fit Hoodie", link: "https://id.shp.ee/UopZh7T" },
+                { type: "Hoodie", name: "H&M Pria Loose Fit Hoodie 0970819", link: "https://id.shp.ee/ahezmNS" },
+                { type: "Sweatshirt", name: "H&M Pria Loose Fit Sweatshirt 0970818_01", link: "https://id.shp.ee/RM9pTQ9" },
+            ]
+        };
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const brand = document.getElementById('brand').value;
+            const type = document.getElementById('type').value;
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (products[brand]) {
+                const filteredProducts = products[brand].filter(product => product.type === type || type === '');
+
+                filteredProducts.forEach(product => {
+                    const productElement = document.createElement('p');
+                    productElement.innerHTML = `<a href="${product.link}" target="_blank">${product.name}</a>`;
+                    resultsDiv.appendChild(productElement);
+                });
+
+                if (filteredProducts.length === 0) {
+                    resultsDiv.innerHTML = 'No products found.';
+                }
+            } else {
+                resultsDiv.innerHTML = 'No products available for this brand.';
+            }
+        });
+    </script>
+</body>
+</html>
